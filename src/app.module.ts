@@ -15,7 +15,8 @@ import { RestaurantModule } from './restaurant/restaurant.module'
       driver: ApolloDriver,
       playground: true,
       autoSchemaFile: true,
-      sortSchema: true
+      sortSchema: true,
+      introspection: true // Turn off in production
     }),
     UsersModule,
     AuthModule,
