@@ -43,8 +43,6 @@ export class AuthResolver {
   async verifyPhone(@Args('phone') phone: string, @Args('code') code: string): Promise<VerifyPhoneResponse> {
     const { user, accessToken, refreshToken } = await this.service.verifyPhone(phone, code)
 
-    console.log('resolver', { user, accessToken, refreshToken })
-
     return {
       user,
       accessToken,
