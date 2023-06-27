@@ -7,6 +7,7 @@ import { AuthResolver } from './auth.resolver'
 import { JwtModule, JwtService } from '@nestjs/jwt'
 import { EmailService } from '../email/email.service'
 import { MailService } from '@sendgrid/mail'
+import { SmsService } from '../sms/sms.service'
 
 @Module({
   imports: [
@@ -17,6 +18,6 @@ import { MailService } from '@sendgrid/mail'
       signOptions: { expiresIn: '1d' }
     })
   ],
-  providers: [AuthService, EmailService, MailService, JwtService, JwtStrategy, AuthResolver]
+  providers: [AuthService, EmailService, MailService, JwtService, JwtStrategy, AuthResolver, SmsService]
 })
 export class AuthModule {}

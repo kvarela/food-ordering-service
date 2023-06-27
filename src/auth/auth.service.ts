@@ -5,10 +5,16 @@ import { JwtService } from '@nestjs/jwt'
 import { VerificationStatus } from './verification-status.enum'
 import { TokenPayload } from '../types/token-payload.type'
 import { EmailService } from '../email/email.service'
+import { SmsService } from '../sms/sms.service'
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UsersService, private jwtService: JwtService, private emailService: EmailService) {}
+  constructor(
+    private usersService: UsersService,
+    private jwtService: JwtService,
+    private emailService: EmailService,
+    private readonly smsService: SmsService
+  ) {}
 
   async register(data: Partial<User>): Promise<User> {
     const existingUserByEmail = await this.usersService.findOne({ where: { email: data.email } })
@@ -57,6 +63,13 @@ export class AuthService {
 
     user.verificationStatus = VerificationStatus.EMAIL_AND_PASSWORD_VERIFIED
     await user.save()
+
+    // Send phone verification code
+    const phoneVerificationCode = Math.floor(100000 + Math.random() * 900000).toString()
+    user.phoneVerificationCode = phoneVerificationCode
+    await user.save()
+
+    await this.smsService.send(user.phone, `Your Space Food Runners verification code is ${phoneVerificationCode}`)
 
     return user
   }
