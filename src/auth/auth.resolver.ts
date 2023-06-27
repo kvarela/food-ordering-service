@@ -21,7 +21,7 @@ export class AuthResolver {
     @Args('username') username: string,
     @Args('phone') phone: string
   ): Promise<User> {
-    const user = await this.usersService.register({
+    const user = await this.service.register({
       email,
       password,
       username,

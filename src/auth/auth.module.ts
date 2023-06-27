@@ -1,10 +1,12 @@
-import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { UsersModule } from '../users/users.module';
-import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from './jwt.strategy';
-import { AuthResolver } from './auth.resolver';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { Module } from '@nestjs/common'
+import { AuthService } from './auth.service'
+import { UsersModule } from '../users/users.module'
+import { PassportModule } from '@nestjs/passport'
+import { JwtStrategy } from './jwt.strategy'
+import { AuthResolver } from './auth.resolver'
+import { JwtModule, JwtService } from '@nestjs/jwt'
+import { EmailService } from '../email/email.service'
+import { MailService } from '@sendgrid/mail'
 
 @Module({
   imports: [
@@ -12,9 +14,9 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
     UsersModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1d' },
-    }),
+      signOptions: { expiresIn: '1d' }
+    })
   ],
-  providers: [AuthService, JwtService, JwtStrategy, AuthResolver],
+  providers: [AuthService, EmailService, MailService, JwtService, JwtStrategy, AuthResolver]
 })
 export class AuthModule {}

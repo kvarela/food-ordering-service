@@ -7,7 +7,7 @@ import { FindOneOptions, Repository } from 'typeorm'
 export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
-  async register(data: Partial<User>): Promise<User> {
+  async create(data: Partial<User>): Promise<User> {
     const user = await this.repo.create(data)
     await this.repo.save(user)
 

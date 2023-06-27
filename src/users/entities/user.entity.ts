@@ -20,8 +20,8 @@ export class User extends BaseEntity {
   @Field({ nullable: true })
   username: string
 
-  @Column()
-  @Field()
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   address: string
 
   @Column({ unique: true })
