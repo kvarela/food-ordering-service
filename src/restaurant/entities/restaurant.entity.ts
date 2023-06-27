@@ -1,9 +1,10 @@
 import { ObjectType, Field, Int, Float } from '@nestjs/graphql'
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
 import { User } from '../../users/entities/user.entity'
 
 @ObjectType()
 @Entity()
+@Unique(['name', 'address'])
 export class Restaurant {
   @PrimaryGeneratedColumn('uuid')
   @Field()
