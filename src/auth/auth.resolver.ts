@@ -1,23 +1,17 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { UsersService } from '../users/users.service';
-import { AuthService } from './auth.service';
-import { User } from '../users/entities/user.entity';
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
+import { UsersService } from '../users/users.service'
+import { AuthService } from './auth.service'
+import { User } from '../users/entities/user.entity'
 
 @Resolver()
 export class AuthResolver {
-  constructor(
-    private readonly service: AuthService,
-    private readonly usersService: UsersService,
-  ) {}
+  constructor(private readonly service: AuthService, private readonly usersService: UsersService) {}
 
   @Mutation(() => User)
-  async login(
-    @Args('email') email: string,
-    @Args('password') password: string,
-  ): Promise<User> {
-    const user = await this.service.login(email, password);
+  async login(@Args('email') email: string, @Args('password') password: string): Promise<User> {
+    const user = await this.service.login(email, password)
 
-    return user;
+    return user
   }
 
   @Mutation(() => User)
@@ -25,46 +19,40 @@ export class AuthResolver {
     @Args('email') email: string,
     @Args('password') password: string,
     @Args('username') username: string,
-    @Args('phone') phone: string,
+    @Args('phone') phone: string
   ): Promise<User> {
-    const user = await this.usersService.create({
+    const user = await this.usersService.register({
       email,
       password,
       username,
-      phone,
-    });
+      phone
+    })
 
-    return user;
+    return user
   }
 
   @Mutation(() => User)
-  async verifyEmail(
-    @Args('email') email: string,
-    @Args('code') code: string,
-  ): Promise<User> {
-    const user = await this.service.verifyEmail(email, code);
+  async verifyEmail(@Args('email') email: string, @Args('code') code: string): Promise<User> {
+    const user = await this.service.verifyEmail(email, code)
 
-    return user;
+    return user
   }
 
   @Mutation(() => User)
   async verifyPhone(
     @Args('phone') phone: string,
-    @Args('code') code: string,
+    @Args('code') code: string
   ): Promise<{
-    user: User;
-    accessToken: string;
-    refreshToken: string;
+    user: User
+    accessToken: string
+    refreshToken: string
   }> {
-    const { user, accessToken, refreshToken } = await this.service.verifyPhone(
-      phone,
-      code,
-    );
+    const { user, accessToken, refreshToken } = await this.service.verifyPhone(phone, code)
 
     return {
       user,
       accessToken,
-      refreshToken,
-    };
+      refreshToken
+    }
   }
 }
