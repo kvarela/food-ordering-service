@@ -1,67 +1,67 @@
-import { ObjectType, Field } from '@nestjs/graphql';
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { UserRole } from './user-role.enum';
-import { VerificationStatus } from '../../auth/verification-status.enum';
+import { ObjectType, Field } from '@nestjs/graphql'
+import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { UserRole } from './user-role.enum'
+import { VerificationStatus } from '../../auth/verification-status.enum'
+import { Res } from '@nestjs/common'
+import { Restaurant } from '../../restaurant/entities/restaurant.entity'
 
 @ObjectType()
 @Entity()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   @Field()
-  id: string;
+  id: string
 
   @Column({ unique: true })
   @Field()
-  email: string;
+  email: string
 
   @Column({ unique: true, nullable: true })
   @Field({ nullable: true })
-  username: string;
+  username: string
 
   @Column()
   @Field()
-  address: string;
+  address: string
 
   @Column({ unique: true })
   @Field()
-  phone: string;
+  phone: string
 
   @Column({ nullable: true })
   @Field({ description: 'Cloudinary public id', nullable: true })
-  avatarId: string;
+  avatarId: string
 
   @Column()
-  password: string;
+  password: string
 
   @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
-  role: UserRole;
+  role: UserRole
 
   @CreateDateColumn()
   @Field()
-  createdAt: Date;
+  createdAt: Date
 
   @Column({
     type: 'enum',
     enum: VerificationStatus,
-    default: VerificationStatus.UNVERIFIED,
+    default: VerificationStatus.UNVERIFIED
   })
   @Field(() => VerificationStatus)
-  verificationStatus: VerificationStatus;
+  verificationStatus: VerificationStatus
 
   @Column({ nullable: true })
-  emailVerificationCode: string;
+  emailVerificationCode: string
 
   @Column({ nullable: true })
-  phoneVerificationCode: string;
+  phoneVerificationCode: string
+
+  @OneToMany(() => Restaurant, (restaurant) => restaurant.createdBy)
+  @Field(() => [Restaurant])
+  restaurantsCreated: Restaurant[]
 
   // TODO: HASH AND SALT PASSWORDS
   comparePassword(password: string) {
-    return password === this.password;
+    return password === this.password
   }
 }
