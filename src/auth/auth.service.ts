@@ -44,11 +44,19 @@ export class AuthService {
       throw new Error('User not found')
     }
 
+    // If the user is not at least email verified, throw an error
+    if (user.verificationStatus === VerificationStatus.UNVERIFIED) {
+      throw new Error('User has not verified email yet')
+    }
+
     const isPasswordValid = await user.comparePassword(password)
 
     if (!isPasswordValid) {
       throw new Error('Invalid password')
     }
+
+    user.verificationStatus = VerificationStatus.EMAIL_AND_PASSWORD_VERIFIED
+    await user.save()
 
     return user
   }
@@ -87,13 +95,20 @@ export class AuthService {
       throw new Error('Invalid verification code')
     }
 
+    if (
+      user.verificationStatus === VerificationStatus.EMAIL_VERIFIED ||
+      user.verificationStatus === VerificationStatus.UNVERIFIED
+    ) {
+      throw new Error('User has not verified email and password yet')
+    }
+
     const payload: TokenPayload = { sub: user.id }
     const accessToken = this.jwtService.sign(payload)
     const refreshToken = this.jwtService.sign(payload, {
       expiresIn: '7d'
     })
 
-    user.verificationStatus = VerificationStatus.VERIFIED
+    user.verificationStatus = VerificationStatus.EMAIL_PASSWORD_AND_PHONE_VERIFEID
     await user.save()
 
     return { user, accessToken, refreshToken }
