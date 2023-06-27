@@ -9,6 +9,10 @@ import { EmailService } from '../email/email.service'
 import { MailService } from '@sendgrid/mail'
 import { SmsService } from '../sms/sms.service'
 
+import * as dotenv from 'dotenv'
+
+dotenv.config()
+
 @Module({
   imports: [
     PassportModule,

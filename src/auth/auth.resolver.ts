@@ -2,6 +2,7 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { UsersService } from '../users/users.service'
 import { AuthService } from './auth.service'
 import { User } from '../users/entities/user.entity'
+import { VerifyPhoneResponse } from './verify-phone.response'
 
 @Resolver()
 export class AuthResolver {
@@ -38,16 +39,11 @@ export class AuthResolver {
     return user
   }
 
-  @Mutation(() => User)
-  async verifyPhone(
-    @Args('phone') phone: string,
-    @Args('code') code: string
-  ): Promise<{
-    user: User
-    accessToken: string
-    refreshToken: string
-  }> {
+  @Mutation(() => VerifyPhoneResponse)
+  async verifyPhone(@Args('phone') phone: string, @Args('code') code: string): Promise<VerifyPhoneResponse> {
     const { user, accessToken, refreshToken } = await this.service.verifyPhone(phone, code)
+
+    console.log('resolver', { user, accessToken, refreshToken })
 
     return {
       user,

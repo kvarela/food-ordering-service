@@ -116,13 +116,16 @@ export class AuthService {
     }
 
     const payload: TokenPayload = { sub: user.id }
-    const accessToken = this.jwtService.sign(payload)
+    const accessToken = this.jwtService.sign(payload, { secret: process.env.JWT_SECRET })
     const refreshToken = this.jwtService.sign(payload, {
-      expiresIn: '7d'
+      expiresIn: '7d',
+      secret: process.env.JWT_SECRET
     })
 
     user.verificationStatus = VerificationStatus.EMAIL_PASSWORD_AND_PHONE_VERIFEID
     await user.save()
+
+    console.log({ user, accessToken, refreshToken })
 
     return { user, accessToken, refreshToken }
   }
