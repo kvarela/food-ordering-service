@@ -133,8 +133,6 @@ export class AuthService {
     user.verificationStatus = VerificationStatus.EMAIL_PASSWORD_AND_PHONE_VERIFEID
     await user.save()
 
-    console.log({ user, accessToken, refreshToken })
-
     return { user, accessToken, refreshToken }
   }
 }
