@@ -9,7 +9,7 @@ export class SmsService {
     this.twilioClient = Twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
   }
 
-  async send(to: string, body: string): Promise<void> {
+  async send(to: string, body: string) {
     try {
       await this.twilioClient.messages.create({
         body,

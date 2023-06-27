@@ -22,7 +22,9 @@ export class AuthService {
       throw new Error('That email is already registered')
     }
 
-    const existingUserByUsername = await this.usersService.findOne({ where: { username: data.username } })
+    const existingUserByUsername = await this.usersService.findOne({
+      where: { username: data.username }
+    })
     if (existingUserByUsername) {
       throw new Error('That username is already registered')
     }
@@ -69,7 +71,10 @@ export class AuthService {
     user.phoneVerificationCode = phoneVerificationCode
     await user.save()
 
-    await this.smsService.send(user.phone, `Your Space Food Runners verification code is ${phoneVerificationCode}`)
+    await this.smsService.send(
+      user.phone,
+      `Your Space Food Runners verification code is ${phoneVerificationCode}`
+    )
 
     return user
   }
@@ -97,7 +102,10 @@ export class AuthService {
     return user
   }
 
-  async verifyPhone(phone: string, code: string): Promise<{ user: User; accessToken: string; refreshToken: string }> {
+  async verifyPhone(
+    phone: string,
+    code: string
+  ): Promise<{ user: User; accessToken: string; refreshToken: string }> {
     const user = await this.usersService.findOne({ where: { phone } })
 
     if (!user) {
